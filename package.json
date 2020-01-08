@@ -1,8 +1,8 @@
 {
-  "name": "git-publisher",
+  "name": "mylang",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "github:patarapolw/git-publisher",
+  "repository": "github:patarapolw/mylang",
   "author": {
     "name": "Pacharapol Withayasakpunt",
     "email": "patarapolw@gmail.com",
@@ -31,12 +31,9 @@
     "vue-eslint-parser": "^7.0.0"
   },
   "scripts": {
+    "start": "git-publisher",
     "lerna:publish": "lerna publish",
     "test": "lerna run test",
     "lint": "eslint '**'"
-  },
-  "git-publisher": {
-    "dir": "./data",
-    "disqus": "git-publisher"
   }
 }
