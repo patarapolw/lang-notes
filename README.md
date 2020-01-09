@@ -1,4 +1,4 @@
-# mylang
+# [mylang](https://patarpolw.github.io/mylang)
 
 A testing repo for `git-publisher`, which is similar to browsing on GitHub website, but these are supported.
 
