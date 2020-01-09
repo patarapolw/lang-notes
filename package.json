@@ -36,5 +36,10 @@
     "lerna:publish": "lerna publish",
     "test": "lerna run test",
     "lint": "eslint '**'"
+  },
+  "git-publisher": {
+    "plugins": [
+      "plugins/dist/ext.js"
+    ]
   }
 }

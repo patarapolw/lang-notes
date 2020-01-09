@@ -1,23 +1,17 @@
 import qs from 'querystring'
 
-import { IHyperPugFilters } from 'hyperpug'
 import { ShowdownExtension } from 'showdown'
 import { createIndentedFilter } from 'indent-utils'
 import h from 'hyperscript'
-
-import { mdConvert } from './markdown'
-import { pugConvert } from './pug'
-
-export const pugExt: IHyperPugFilters = {
-  markdown: (s: string) => mdConvert(s),
-}
+// eslint-disable-next-line import/default
+import dotProp from 'dot-prop'
 
 export const mdExt: {
   [name: string]: ShowdownExtension
 } = {
   speak: {
     type: 'lang',
-    filter: createIndentedFilter('^^speak', (s, attrs: {
+    filter: createIndentedFilter('speak', (s, attrs: {
       lang?: string
       s?: string
     }) => {
@@ -26,12 +20,6 @@ export const mdExt: {
           onclick: `window.speak("${s || attrs.s || ''}", "${attrs.lang || ''}")`,
         },
       }, s || 'Click to speak').outerHTML
-    }),
-  },
-  pug: {
-    type: 'lang',
-    filter: createIndentedFilter('^^pug', (s) => {
-      return pugConvert(s)
     }),
   },
   simpleTable: {
@@ -51,7 +39,7 @@ export const mdExt: {
   },
   spoiler: {
     type: 'lang',
-    filter: createIndentedFilter('^^spoiler', (s, attrs) => {
+    filter: createIndentedFilter('spoiler', (s, attrs) => {
       return h('details', [
         ...(attrs.summary ? [
           h('summary', attrs.summary),
@@ -62,7 +50,7 @@ export const mdExt: {
   },
   slide: {
     type: 'lang',
-    filter: createIndentedFilter('^^slide', (s, attrs) => {
+    filter: createIndentedFilter('slide', (s, attrs) => {
       return h('a', {
         href: `https://patarapolw.github.io/reveal-md/reveal/?${qs.stringify({
           q: (() => {
@@ -78,39 +66,33 @@ export const mdExt: {
   },
 }
 
-declare global {
-  interface Window {
-    speak(s: string, lang: string): void
-  }
-}
+dotProp.set(window, 'gitPublisher.makeHtml.plugins.markdown', mdExt)
 
-if (typeof window !== 'undefined') {
-  window.speak = (s, lang) => {
-    let trueLang = ''
+dotProp.set(window, 'speak', (s: string, lang: string) => {
+  let trueLang = ''
 
-    const voices = speechSynthesis.getVoices()
-    const [la1, la2] = lang.split(/-_/)
-    if (la2) {
-      const langRegex = new RegExp(`${la1}[-_]${la2}`, 'i')
-      const matchedLang = voices.filter((v) => langRegex.test(v.lang))
-      if (matchedLang.length > 0) {
-        trueLang = matchedLang.sort((v1, v2) => v1.localService
-          ? -1 : v2.localService ? 1 : 0)[0].lang
-      }
-    }
-    if (!trueLang) {
-      const langRegex = new RegExp(`^${la1}`, 'i')
-      const matchedLang = voices.filter((v) => langRegex.test(v.lang))
-      if (matchedLang.length > 0) {
-        trueLang = matchedLang.sort((v1, v2) => v1.localService
-          ? -1 : v2.localService ? 1 : 0)[0].lang
-      }
-    }
-
-    if (trueLang) {
-      const u = new SpeechSynthesisUtterance(s)
-      u.lang = trueLang
-      speechSynthesis.speak(u)
+  const voices = speechSynthesis.getVoices()
+  const [la1, la2] = lang.split(/-_/)
+  if (la2) {
+    const langRegex = new RegExp(`${la1}[-_]${la2}`, 'i')
+    const matchedLang = voices.filter((v) => langRegex.test(v.lang))
+    if (matchedLang.length > 0) {
+      trueLang = matchedLang.sort((v1, v2) => v1.localService
+        ? -1 : v2.localService ? 1 : 0)[0].lang
     }
   }
-}
+  if (!trueLang) {
+    const langRegex = new RegExp(`^${la1}`, 'i')
+    const matchedLang = voices.filter((v) => langRegex.test(v.lang))
+    if (matchedLang.length > 0) {
+      trueLang = matchedLang.sort((v1, v2) => v1.localService
+        ? -1 : v2.localService ? 1 : 0)[0].lang
+    }
+  }
+
+  if (trueLang) {
+    const u = new SpeechSynthesisUtterance(s)
+    u.lang = trueLang
+    speechSynthesis.speak(u)
+  }
+})

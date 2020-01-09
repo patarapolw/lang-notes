@@ -9,10 +9,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc -p src/tsconfig.json",
+    "build": "parcel build -d ../../plugins/dist src/*.ts",
     "test": "ts-mocha --paths -p tests/tsconfig.json tests/**/*.spec.ts"
   },
   "dependencies": {
+    "dot-prop": "^5.2.0",
     "hyperpug": "^1.0.4",
     "hyperscript": "^2.0.2",
     "indent-utils": "^1.0.2",

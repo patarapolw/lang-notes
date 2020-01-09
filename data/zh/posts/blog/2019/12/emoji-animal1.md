@@ -14,11 +14,12 @@ tag:
 As well as, `(‧‧)nnn`
 
 Don't forget -- this entire website is [Highlight text and press 's' to speak](https://patarapolw.github.io/s2speak/)
+
 - Including [/resources](/resources) and [/slides](/slides)
 
 ===
 
-^^speak 🐸
+^^speak(lang="zh") 🐸
 
 ^^spoiler.
   🐸
