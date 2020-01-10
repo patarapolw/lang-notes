@@ -17,7 +17,7 @@ export const mdExt: {
     }) => {
       return h('span.speak', {
         attrs: {
-          onclick: `window.speak("${s || attrs.s || ''}", "${attrs.lang || ''}")`,
+          onclick: `window.speak("${attrs.s || s || ''}", "${attrs.lang || ''}")`,
         },
       }, s || 'Click to speak').outerHTML
     }),
