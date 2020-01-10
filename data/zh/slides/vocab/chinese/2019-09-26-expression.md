@@ -1,4 +1,5 @@
 ---
+type: reveal
 shuffle: true
 js:
   - https://patarapolw.github.io/s2speak/index.min.js?key=x

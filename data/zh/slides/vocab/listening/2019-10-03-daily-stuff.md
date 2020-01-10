@@ -9,7 +9,7 @@ tag:
   - emoji
 ---
 
-^^speak 🛁
+^^speak(lang="zh") 🛁
 
 --
 
@@ -29,7 +29,7 @@ tag:
 
 ---
 
-^^speak 🧽
+^^speak(lang="zh") 🧽
 
 --
 

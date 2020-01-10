@@ -1,3 +1,6 @@
 [submodule "packages/git-publisher"]
 	path = packages/git-publisher
 	url = https://github.com/patarapolw/git-publisher.git
+[submodule "packages/reveal-md-core"]
+	path = packages/reveal-md-core
+	url = https://github.com/patarapolw/reveal-md-core.git
