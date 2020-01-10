@@ -1,6 +1,6 @@
 {
-  "name": "eqdict",
-  "version": "1.0.2",
+  "name": "@patarapolw/eqdict",
+  "version": "1.0.3",
   "license": "MIT",
   "files": [
     "dist",
@@ -32,5 +32,8 @@
     "parcel-bundler": "^1.12.4",
     "ts-mocha": "^6.0.0",
     "typescript": "^3.7.4"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
