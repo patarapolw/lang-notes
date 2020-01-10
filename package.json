@@ -38,10 +38,5 @@
     "test": "lerna run test",
     "lint": "eslint '**'",
     "markdownlint": "markdownlint data/**/*.md"
-  },
-  "git-publisher": {
-    "plugins": [
-      "plugins/dist/ext.js"
-    ]
   }
 }
