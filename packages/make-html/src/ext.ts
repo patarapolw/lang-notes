@@ -15,7 +15,7 @@ export const mdExt: {
       lang?: string
       s?: string
     }) => {
-      return h('span', {
+      return h('span.speak', {
         attrs: {
           onclick: `window.speak("${s || attrs.s || ''}", "${attrs.lang || ''}")`,
         },
@@ -96,3 +96,12 @@ dotProp.set(window, 'speak', (s: string, lang: string) => {
     speechSynthesis.speak(u)
   }
 })
+
+document.head.append(Object.assign(document.createElement('style'), {
+  innerHTML: `
+  .speak {
+    color: blue;
+    cursor: pointer;
+  }
+  `,
+}))
