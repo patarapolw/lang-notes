@@ -1,64 +1,94 @@
+import { useEffect, useState } from 'react'
+
 import Head from 'next/head'
+import XRegexp from 'xregexp'
 import styles from '~/styles/styles.module.css'
 
 const Home = () => {
+  const [q, setQ] = useState('')
+  const [re, setRe] = useState('')
+  const [lang, setLang] = useState('')
+
+  const [langChoice, setLangChoice] = useState(
+    // eslint-disable-next-line no-undef
+    () => [] as SpeechSynthesisVoice[]
+  )
+
+  useEffect(() => {
+    if (window.speechSynthesis) {
+      setLangChoice(speechSynthesis.getVoices())
+
+      speechSynthesis.onvoiceschanged = () => {
+        setLangChoice(speechSynthesis.getVoices())
+      }
+    }
+  }, [0])
+
   return (
     <div className={styles.container}>
       <Head>
-        <title>Create Next App</title>
+        <title>Transcribe and speak engine</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <h1 className={styles.title}>Transcribe and speak engine</h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
+        <p className={styles.description}>Choose a language and press speak.</p>
 
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+        <textarea
+          rows={10}
+          value={q}
+          onInput={(ev) => setQ((ev.target as HTMLTextAreaElement).value)}
+        ></textarea>
 
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
+        <input
+          type="text"
+          placeholder="Filter with XRegExp"
+          value={re}
+          onInput={(ev) => setRe((ev.target as HTMLInputElement).value)}
+        />
 
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
+        <select value={lang} onChange={(ev) => setLang(ev.target.value)}>
+          {langChoice.map((it) => (
+            <option value={it.name} key={it.name} selected={it.default}>
+              {`${it.lang} (${it.name})`}
+            </option>
+          ))}
+        </select>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+        <button
+          type="button"
+          onClick={() => {
+            let txt = q
+            if (re.trim()) {
+              const m = XRegexp(re).exec(q)
+              if (m) {
+                txt = m[0]
+              }
+            }
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+            const u = new SpeechSynthesisUtterance(txt)
+            u.voice = langChoice.find((it) => it.name === lang)
+            speechSynthesis.speak(u)
+          }}
         >
-          Powered by Vercel
-        </a>
-      </footer>
+          Speak
+        </button>
+
+        <style jsx>{`
+          textarea {
+            width: 100%;
+          }
+
+          textarea,
+          input,
+          select {
+            margin-bottom: 1em;
+            background-color: rgba(255, 255, 255, 0.5);
+          }
+        `}</style>
+      </main>
     </div>
   )
 }
